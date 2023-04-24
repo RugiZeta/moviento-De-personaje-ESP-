@@ -1,0 +1,15 @@
+if (heldObject != null && Input.GetKeyDown(KeyCode.E))
+{
+    if (heldObject.CompareTag("Comida"))
+    {
+        // Hacer que el jugador se alimente
+        Debug.Log("El jugador se está alimentando");
+    }
+
+    // Volvemos a activar la gravedad para que el objeto caiga al suelo
+    heldObject.GetComponent<Rigidbody>().useGravity = true;
+    heldObject.transform.parent = null;
+    heldObject = null;
+
+    Debug.Log("Objeto soltado");
+}

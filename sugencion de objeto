@@ -1,0 +1,43 @@
+using UnityEngine;
+
+public class ObjectInteraction : MonoBehaviour
+{
+    public float grabRange = 2f;
+    public LayerMask grabbableMask;
+    public Transform holdPosition;
+
+    private GameObject heldObject;
+
+    void Update()
+    {
+        // Si no estamos sosteniendo un objeto, comprobamos si hay algún objeto agarrable cerca
+        if (heldObject == null && Input.GetKeyDown(KeyCode.E))
+        {
+            Collider[] nearbyObjects = Physics.OverlapSphere(transform.position, grabRange, grabbableMask);
+
+            if (nearbyObjects.Length > 0)
+            {
+                heldObject = nearbyObjects[0].gameObject;
+
+                // Desactivamos la gravedad para que el objeto no caiga al suelo
+                heldObject.GetComponent<Rigidbody>().useGravity = false;
+
+                // Movemos el objeto a la posición de la mano
+                heldObject.transform.position = holdPosition.position;
+                heldObject.transform.parent = holdPosition;
+
+                Debug.Log("Objeto agarrado: " + heldObject.name);
+            }
+        }
+        // Si estamos sosteniendo un objeto, comprobamos si queremos soltarlo
+        else if (heldObject != null && Input.GetKeyDown(KeyCode.E))
+        {
+            // Volvemos a activar la gravedad para que el objeto caiga al suelo
+            heldObject.GetComponent<Rigidbody>().useGravity = true;
+            heldObject.transform.parent = null;
+            heldObject = null;
+
+            Debug.Log("Objeto soltado");
+        }
+    }
+}

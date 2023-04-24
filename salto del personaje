@@ -1,0 +1,27 @@
+using UnityEngine;
+
+public class Jump : MonoBehaviour
+{
+    public float jumpForce = 5f;
+    public float raycastDistance = 0.1f;
+    public LayerMask groundMask;
+
+    private Rigidbody rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void FixedUpdate()
+    {
+        // Comprueba si el jugador está en el suelo
+        bool isGrounded = Physics.Raycast(transform.position, -Vector3.up, raycastDistance, groundMask);
+
+        // Si el jugador está en el suelo y presiona la tecla de salto, aplica una fuerza hacia arriba
+        if (isGrounded && Input.GetButtonDown("Jump"))
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+}
